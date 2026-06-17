@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scent Studio – Perfume Shop</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f3f7;
+      color: #222;
+    }
+
+    header {
+      padding: 1.5rem 2rem;
+      background: linear-gradient(135deg, #1f1b2e, #4b2c5e);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .tagline {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      border: none;
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: 1px solid transparent;
+      transition: all 0.18s ease;
+    }
+
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .filter-btn.active {
+      background: #fff;
+      color: #2a1f3b;
+      border-color: #f0e1ff;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 1.5rem auto 3rem;
+      padding: 0 1.5rem;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .toolbar h2 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 260px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid #d2c7e6;
+      font-size: 0.9rem;
+      outline: none;
+      background: #fff;
+    }
+
+    .search-box input:focus {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.18);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .product-card {
+      background: #fff;
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-chip {
+      position: absolute;
+      top: 0.9rem;
+      right: 0.9rem;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: #f4f0ff;
+      color: #5b21b6;
+      font-weight: 600;
+    }
+
+    .product-name {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .product-notes {
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.4rem;
+      font-size: 0.85rem;
+    }
+
+    .price {
+      font-weight: 700;
+      color: #1f2933;
+    }
+
+    .size {
+      color: #6b7280;
+      font-size: 0.8rem;
+    }
+
+    .add-btn {
+      margin-top: 0.6rem;
+      border: none;
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: #111827;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: background 0.18s ease, transform 0.1s ease;
+    }
+
+    .add-btn:hover {
+      background: #020617;
+      transform: translateY(-1px);
+    }
+
+    .add-btn span {
+      font-size: 1rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem 1rem 2rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div class="logo">Scent Studio</div>
+      <div class="tagline">Perfumes, Eau de Toilette & Cologne, curated by mood and memory.</div>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="perfume">Perfume</button>
+      <button class="filter-btn" data-filter="eau_de_toilette">Eau de Toilette</button>
+      <button class="filter-btn" data-filter="cologne">Cologne</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <h2>Explore our scents</h2>
+      <div class="search-box">
+        <input id="searchInput" type="text" placeholder="Search by name or notes…" />
+      </div>
+    </div>
+
+    <section id="productsGrid" class="products-grid"></section>
+
+    <div id="emptyState" class="empty-state" style="display:none;">
+      No scents match your filters. Try a different category or search term.
+    </div>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> Scent Studio. Follow your nose.
+  </footer>
+
+  <script>
+    // --- Product data (you can expand this list) ---
+    const products = [
+      {
+        id: 1,
+        name: "Midnight Fig",
+        type: "perfume",
+        size: "50 ml",
+        price: 98,
+        notes: "Black fig, violet leaf, soft musk",
+      },
+      {
+        id: 2,
+        name: "Citrus Wake",
+        type: "eau_de_toilette",
+        size: "100 ml",
+        price: 72,
+        notes: "Grapefruit, bergamot, neroli",
+      },
+      {
+        id: 3,
+        name: "Harbor Mist",
+        type: "cologne",
+        size: "75 ml",
+        price: 64,
+        notes: "Sea salt, driftwood, sage",
+      },
+      {
+        id: 4,
+        name: "Amber Library",
+        type: "perfume",
+        size: "50 ml",
+        price: 110,
+        notes: "Amber, vanilla, worn leather",
+      },
+      {
+        id: 5,
+        name: "Green Rooftop",
+        type: "eau_de_toilette",
+        size: "100 ml",
+        price: 79,
+        notes: "Basil, tomato leaf, white cedar",
+      },
+      {
+        id: 6,
+        name: "First Light",
+        type: "cologne",
+        size: "75 ml",
+        price: 59,
+        notes: "Mandarin, ginger, clean musk",
+      },
+    ];
+
+    const typeLabels = {
+      perfume: "Perfume",
+      eau_de_toilette: "Eau de Toilette",
+      cologne: "Cologne",
+    };
+
+    const productsGrid = document.getElementById("productsGrid");
+    const emptyState = document.getElementById("emptyState");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const searchInput = document.getElementById("searchInput");
+
+    let activeFilter = "all";
+    let searchQuery = "";
+
+    function renderProducts() {
+      productsGrid.innerHTML = "";
+
+      const filtered = products.filter((p) => {
+        const matchesType =
+          activeFilter === "all" ? true : p.type === activeFilter;
+
+        const query = searchQuery.trim().toLowerCase();
+        const matchesSearch =
+          !query ||
+          p.name.toLowerCase().includes(query) ||
+          p.notes.toLowerCase().includes(query);
+
+        return matchesType && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        emptyState.style.display = "block";
+        return;
+      } else {
+        emptyState.style.display = "none";
+      }
+
+      filtered.forEach((product) => {
+        const card = document.createElement("article");
+        card.className = "product-card";
+
+        card.innerHTML = `
+          <div class="product-chip">${typeLabels[product.type]}</div>
+          <div class="product-name">${product.name}</div>
+          <div class="product-notes">${product.notes}</div>
+          <div class="product-meta">
+            <div class="price">$${product.price}</div>
+            <div class="size">${product.size}</div>
+          </div>
+          <button class="add-btn" data-id="${product.id}">
+            <span>+</span> Add to bag
+          </button>
+        `;
+
+        productsGrid.appendChild(card);
+      });
+    }
+
+    // Filter buttons
+    filterButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filterButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeFilter = btn.getAttribute("data-filter");
+        renderProducts();
+      });
+    });
+
+    // Search
+    searchInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value;
+      renderProducts();
+    });
+
+    // Add to bag (demo only)
+    productsGrid.addEventListener("click", (e) => {
+      if (e.target.closest(".add-btn")) {
+        const id = e.target.closest(".add-btn").getAttribute("data-id");
+        const product = products.find((p) => String(p.id) === String(id));
+        if (product) {
+          alert(`Added "${product.name}" to your bag (demo only).`);
+        }
+      }
+    });
+
+    // Footer year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Initial render
+    renderProducts();
+  </script>
+</body>
+</html>
